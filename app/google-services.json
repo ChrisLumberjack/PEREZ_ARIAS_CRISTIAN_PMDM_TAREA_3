@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "620757350243",
+    "project_id": "pokedex-469fb",
+    "storage_bucket": "pokedex-469fb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620757350243:android:3dcd343f79382efeac8556",
+        "android_client_info": {
+          "package_name": "tarea3.perez_arias_cristian_pmdm_tarea_3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "620757350243-qhpiosrsmdrh1h16c2accoikclt5k9ho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsoIHEChvr-2uI4Fg9jTYbTZTlanxV6Uo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "620757350243-qhpiosrsmdrh1h16c2accoikclt5k9ho.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

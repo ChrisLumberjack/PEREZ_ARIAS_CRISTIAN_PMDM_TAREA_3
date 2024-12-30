@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Primer ítem del menú -->
+    <item
+        android:id="@+id/nav_pokemon_capturados"
+        android:icon="@drawable/baseline_pokemon_capt"
+        android:title="Pokémon Capturados" />
+
+    <!-- Segundo ítem del menú -->
+    <item
+        android:id="@+id/nav_pokedex"
+        android:icon="@drawable/baseline_pokedex"
+        android:title="Pokédex" />
+
+    <!-- Tercer ítem del menú -->
+    <item
+        android:id="@+id/nav_ajustes"
+        android:icon="@drawable/baseline_app_settings"
+        android:title="Ajustes" />
+
+</menu>
