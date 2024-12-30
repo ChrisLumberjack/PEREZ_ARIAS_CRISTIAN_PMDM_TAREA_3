@@ -1,60 +1,103 @@
 package tarea3.perez_arias_cristian_pmdm_tarea_3.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.FirebaseDatabase
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import tarea3.perez_arias_cristian_pmdm_tarea_3.R
+import tarea3.perez_arias_cristian_pmdm_tarea_3.pokedex.Pokemon
+import tarea3.perez_arias_cristian_pmdm_tarea_3.pokedex.PokemonAdapter
+import tarea3.perez_arias_cristian_pmdm_tarea_3.pokedex.PokemonDetailResponse
+import tarea3.perez_arias_cristian_pmdm_tarea_3.pokedex.PokemonResponse
+import tarea3.perez_arias_cristian_pmdm_tarea_3.pokedex.PokemonService
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PokedexFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PokedexFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var pokemonAdapter: PokemonAdapter
+    private lateinit var retrofit: Retrofit
+    private lateinit var pokemonService: PokemonService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
+        // Inicializar Retrofit
+        retrofit = Retrofit.Builder()
+            .baseUrl("https://pokeapi.co/api/v2/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        pokemonService = retrofit.create(PokemonService::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pokedex, container, false)
+        // Inflar el layout del fragment
+        val view = inflater.inflate(R.layout.fragment_pokedex, container, false)
+
+        // Configurar RecyclerView
+        recyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        pokemonAdapter = PokemonAdapter()  // No pasamos lista aquí, la actualizamos después
+        recyclerView.adapter = pokemonAdapter
+
+        // Llamar al servicio para obtener la lista de Pokémon
+        loadPokemonList()
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PokedexFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PokedexFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun loadPokemonList() {
+        pokemonService.getPokemonList().enqueue(object : Callback<PokemonResponse> {
+            override fun onResponse(call: Call<PokemonResponse>, response: Response<PokemonResponse>) {
+                if (response.isSuccessful) {
+                    val pokemonList = response.body()?.results ?: emptyList()
+                    // Actualizamos la lista en el adaptador
+                    pokemonAdapter.submitList(pokemonList)
+                } else {
+                    Toast.makeText(context, "Error al cargar la lista de Pokémon", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            override fun onFailure(call: Call<PokemonResponse>, t: Throwable) {
+                Toast.makeText(context, "Fallo en la conexión", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun capturePokemon(pokemon: Pokemon) {
+        // Hacer la petición para obtener los detalles del Pokémon
+        pokemonService.getPokemonDetails(pokemon.url).enqueue(object :
+            Callback<PokemonDetailResponse> {
+            override fun onResponse(call: Call<PokemonDetailResponse>, response: Response<PokemonDetailResponse>) {
+                if (response.isSuccessful) {
+                    val pokemonDetails = response.body()
+                    pokemonDetails?.let {
+                        // Guardar en Firebase
+                        val pokemonRef = FirebaseDatabase.getInstance().getReference("captured_pokemon")
+                        pokemonRef.child(it.name).setValue(it)
+                        Toast.makeText(context, "${it.name} capturado!", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(context, "Error al obtener los detalles del Pokémon", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<PokemonDetailResponse>, t: Throwable) {
+                Toast.makeText(context, "Fallo en la conexión", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- TabLayout u otros elementos, asignando las restricciones -->
+    <!-- TabLayout para las pestañas -->
     <com.google.android.material.tabs.TabLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,10 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ajustes" />
-
     </com.google.android.material.tabs.TabLayout>
 
-    <!-- ViewPager2 -->
+    <!-- ViewPager2 para mostrar los fragmentos -->
     <androidx.viewpager2.widget.ViewPager2
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -51,5 +50,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/bottom_nav_menu" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
