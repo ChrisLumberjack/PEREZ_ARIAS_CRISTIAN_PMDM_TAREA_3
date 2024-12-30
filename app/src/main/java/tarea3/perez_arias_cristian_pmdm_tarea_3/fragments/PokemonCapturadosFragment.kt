@@ -1,60 +1,101 @@
 package tarea3.perez_arias_cristian_pmdm_tarea_3.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import tarea3.perez_arias_cristian_pmdm_tarea_3.R
+import tarea3.perez_arias_cristian_pmdm_tarea_3.pokedex.Pokemon
+import tarea3.perez_arias_cristian_pmdm_tarea_3.pokedex.PokemonAdapter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PokemonCapturadosFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PokemonCapturadosFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var pokemonAdapter: PokemonAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            // Aquí puedes recuperar los parámetros si es necesario
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pokemon_capturados, container, false)
+        val view = inflater.inflate(R.layout.fragment_pokemon_capturados, container, false)
+
+        recyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+        // Crear el adaptador y pasarle la función onItemClick
+        pokemonAdapter = PokemonAdapter(
+            onItemClick = { pokemon ->
+                // Acción que se ejecuta al hacer clic en un Pokémon
+                Toast.makeText(context, "Pokémon seleccionado: ${pokemon.name}", Toast.LENGTH_SHORT).show()
+                // Aquí puedes lanzar una nueva actividad o fragmento con los detalles del Pokémon
+            }
+        )
+        recyclerView.adapter = pokemonAdapter
+
+        // Cargar los Pokémon capturados desde Firestore
+        loadCapturedPokemons()
+
+
+
+
+
+        val button: Button = view.findViewById(R.id.btn_actualizar_pokedex)
+        button.setOnClickListener(){
+            loadCapturedPokemons()
+        }
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PokemonCapturadosFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PokemonCapturadosFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    // Función para cargar los Pokémon capturados de Firestore
+    fun loadCapturedPokemons() {
+        val db = FirebaseFirestore.getInstance()
+        val user = FirebaseAuth.getInstance().currentUser
+        val userEmail = user?.email ?: "unknown"
+
+        // Accedemos a la colección de Pokémon capturados desde Firestore
+        db.collection("pokemon")
+            .whereEqualTo("userEmail", userEmail)
+            .get()
+            .addOnSuccessListener { result ->
+                val capturedPokemons = mutableListOf<Pokemon>()
+                for (document in result) {
+                    val pokemon = document.toObject(Pokemon::class.java)
+                    // Aseguramos que se obtiene correctamente la URL de la imagen desde Firestore
+                    pokemon.photoUrl = document.getString("photoUrl")  // Aquí añadimos la URL de Firestore
+                    capturedPokemons.add(pokemon)
                 }
+
+                // Actualizamos el adaptador con la lista de Pokémon capturados
+                pokemonAdapter.submitList(capturedPokemons)
+
             }
+            .addOnFailureListener { exception ->
+                Toast.makeText(context, "Error al cargar los Pokémon capturados", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+
+
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = PokemonCapturadosFragment()
     }
 }

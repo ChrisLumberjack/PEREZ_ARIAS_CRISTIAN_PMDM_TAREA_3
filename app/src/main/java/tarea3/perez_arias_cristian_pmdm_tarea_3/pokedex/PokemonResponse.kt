@@ -5,6 +5,18 @@ data class PokemonResponse(
 )
 
 data class Pokemon(
-    val name: String,
-    val url: String
+    val id: Int = 0,
+    var photoUrl: String? = null,
+    val name: String = "",
+    val url: String = "",
+    val userEmail: String = "",
+    val types: List<String> = emptyList()  // Lista vacía como valor predeterminado
+)
+
+data class Type(
+    val type: TypeDetail
+)
+
+data class TypeDetail(
+    val name: String
 )

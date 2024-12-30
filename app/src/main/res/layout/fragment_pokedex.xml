@@ -5,11 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".fragments.PokedexFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- RecyclerView para mostrar la lista de Pokémon -->
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/recycler_view"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <!-- Botón para actualizar el Pokédex -->
+
 
 </RelativeLayout>
