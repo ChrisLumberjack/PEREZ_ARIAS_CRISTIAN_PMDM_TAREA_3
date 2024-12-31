@@ -176,14 +176,5 @@ class PokedexFragment : Fragment() {
         return matchResult?.groups?.get(1)?.value?.toInt() ?: 0
     }
 
-    // Función para obtener los tipos del Pokémon a partir de la URL (puedes usar Retrofit para hacer una petición HTTP)
-    fun getPokemonTypes(url: String): List<String> {
-        // Aquí puedes realizar una petición a la API de PokeAPI para obtener los tipos de un Pokémon usando su URL
-        // Esto es solo un ejemplo simple. Asegúrate de hacer la petición correctamente en tu código.
-        // Ejemplo de URL: https://pokeapi.co/api/v2/pokemon/{id}
 
-        // Aquí puedes usar Retrofit o alguna otra librería para obtener esta información.
-        // Para simplificar, solo devolveremos una lista de ejemplo:
-        return listOf("Normal", "Flying")  // Ejemplo de tipos
-    }
 }

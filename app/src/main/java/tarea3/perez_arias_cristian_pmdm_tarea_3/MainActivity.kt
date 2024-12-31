@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         viewPager = findViewById(R.id.view_pager)
         bottomNavigationView = findViewById(R.id.bottom_navigation)
 
+
+
         // Configura el ViewPager2 con un adaptador
         val pagerAdapter = ViewPagerAdapter(this)
         viewPager.adapter = pagerAdapter
