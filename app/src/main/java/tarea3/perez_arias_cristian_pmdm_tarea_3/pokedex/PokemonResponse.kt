@@ -10,7 +10,7 @@ data class PokemonResponse(
 
 
 data class Pokemon(
-    val id: Int,
+    var id: Int,
     val url: String,
     var photoUrl: String?,
     val height: Double,

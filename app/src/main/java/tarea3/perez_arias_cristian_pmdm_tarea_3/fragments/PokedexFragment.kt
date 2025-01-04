@@ -2,10 +2,13 @@ package tarea3.perez_arias_cristian_pmdm_tarea_3.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,7 +58,7 @@ class PokedexFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         // Define el comportamiento de onItemClick
-        pokemonAdapter =PokemonAdapter(
+        pokemonAdapter = PokemonAdapter(
             onItemClick = { pokemon ->
                 capturePokemon(pokemon)
             },
@@ -64,6 +67,8 @@ class PokedexFragment : Fragment() {
                 ""
             }
         )
+
+
 
         recyclerView.adapter = pokemonAdapter
 
@@ -77,7 +82,7 @@ class PokedexFragment : Fragment() {
         pokemonService.getPokemonList().enqueue(object : Callback<PokemonResponse> {
             override fun onResponse(
                 call: Call<PokemonResponse>,
-                response: Response<PokemonResponse>
+                response: Response<PokemonResponse>,
             ) {
                 if (response.isSuccessful) {
                     val pokemonList = response.body()?.results ?: emptyList()
@@ -88,60 +93,66 @@ class PokedexFragment : Fragment() {
 
                     pokemonList.forEach { pokemon ->
                         val pokemonIndex = getPokemonIndexFromUrl(pokemon.url)
-                        pokemonService.getPokemonDetails(pokemonIndex).enqueue(object : Callback<PokemonDetails> {
-                            override fun onResponse(
-                                call: Call<PokemonDetails>,
-                                response: Response<PokemonDetails>
-                            ) {
-                                if (response.isSuccessful) {
-                                    val pokemonDetails = response.body()
-                                    pokemonDetails?.let {
-                                        // Aquí obtenemos los detalles y los agregamos a la lista
-                                        val updatedPokemon = Pokemon(
-                                            id = it.id,
-                                            name = pokemon.name,
-                                            url = pokemon.url,
-                                            photoUrl = it.sprites.front_default,
-                                            types = it.types.map { type -> type.type.name },  // Accedemos directamente a `type.name`
-                                            weight = it.weight.toDouble(),  // Convertimos a Double
-                                            height = it.height.toDouble()   // Convertimos a Double
-                                        )
+                        pokemonService.getPokemonDetails(pokemonIndex)
+                            .enqueue(object : Callback<PokemonDetails> {
+                                override fun onResponse(
+                                    call: Call<PokemonDetails>,
+                                    response: Response<PokemonDetails>,
+                                ) {
+                                    if (response.isSuccessful) {
+                                        val pokemonDetails = response.body()
+                                        pokemonDetails?.let {
+                                            // Aquí obtenemos los detalles y los agregamos a la lista
+                                            val updatedPokemon = Pokemon(
+                                                id = it.id,
+                                                name = pokemon.name,
+                                                url = pokemon.url,
+                                                photoUrl = it.sprites.front_default,
+                                                types = it.types.map { type -> type.type.name },  // Accedemos directamente a `type.name`
+                                                weight = it.weight.toDouble(),  // Convertimos a Double
+                                                height = it.height.toDouble()   // Convertimos a Double
+                                            )
 
-                                        // Agregar el Pokémon actualizado a la lista
-                                        pokemonDetailsList.add(updatedPokemon)
+                                            // Agregar el Pokémon actualizado a la lista
+                                            pokemonDetailsList.add(updatedPokemon)
 
-                                        // Si hemos terminado de procesar todos los Pokémon, actualizamos el adaptador
-                                        if (pokemonDetailsList.size == pokemonList.size) {
-                                            pokemonAdapter.submitList(pokemonDetailsList)
+                                            // Si hemos terminado de procesar todos los Pokémon, actualizamos el adaptador
+                                            if (pokemonDetailsList.size == pokemonList.size) {
+                                                pokemonAdapter.submitList(pokemonDetailsList)
+                                                pokemonAdapter.setCanDelete(false)
 
-                                            // Mostrar un solo mensaje Toast después de completar el proceso
-                                            if (!errorOccurred) {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Lista de Pokémon cargada correctamente",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                // Mostrar un solo mensaje Toast después de completar el proceso
+                                                if (!errorOccurred) {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Lista de Pokémon cargada correctamente",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
                                             }
                                         }
+                                    } else {
+                                        errorOccurred = true
+                                        // En caso de error en la carga de detalles, mostrar solo un mensaje
+                                        Toast.makeText(
+                                            context,
+                                            "Error al cargar detalles de Pokémon",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
-                                } else {
+
+                                }
+
+                                override fun onFailure(call: Call<PokemonDetails>, t: Throwable) {
                                     errorOccurred = true
-                                    // En caso de error en la carga de detalles, mostrar solo un mensaje
+                                    // En caso de fallo en la conexión
                                     Toast.makeText(
                                         context,
-                                        "Error al cargar detalles de Pokémon",
+                                        "Fallo en la conexión al obtener detalles",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-
-                            }
-
-                            override fun onFailure(call: Call<PokemonDetails>, t: Throwable) {
-                                errorOccurred = true
-                                // En caso de fallo en la conexión
-                                Toast.makeText(context, "Fallo en la conexión al obtener detalles", Toast.LENGTH_SHORT).show()
-                            }
-                        })
+                            })
                     }
                 } else {
                     Toast.makeText(
@@ -174,7 +185,8 @@ class PokedexFragment : Fragment() {
     private fun capturePokemon(pokemon: Pokemon) {
         // Obtén el usuario actual desde Firebase Authentication
         val user = FirebaseAuth.getInstance().currentUser
-        val userEmail = user?.email ?: "unknown" // Si el usuario no está autenticado, ponemos "unknown"
+        val userEmail =
+            user?.email ?: "unknown" // Si el usuario no está autenticado, ponemos "unknown"
 
         // Creamos la instancia de Retrofit para obtener los detalles del Pokémon
         val pokemonService = RetrofitInstance.pokemonService
@@ -184,7 +196,10 @@ class PokedexFragment : Fragment() {
 
         // Realizamos la solicitud para obtener los detalles del Pokémon
         pokemonService.getPokemonDetails(pokemonIndex).enqueue(object : Callback<PokemonDetails> {
-            override fun onResponse(call: Call<PokemonDetails>, response: Response<PokemonDetails>) {
+            override fun onResponse(
+                call: Call<PokemonDetails>,
+                response: Response<PokemonDetails>,
+            ) {
                 if (response.isSuccessful) {
                     // Obtenemos los detalles del Pokémon
                     val pokemonDetails = response.body()
@@ -194,7 +209,8 @@ class PokedexFragment : Fragment() {
                         val capturedPokemon = CapturedPokemon(
                             name = pokemon.name,
                             index = pokemonIndex,
-                            photoUrl = pokemon.photoUrl ?: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonIndex}.png",
+                            photoUrl = pokemon.photoUrl
+                                ?: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonIndex}.png",
                             types = pokemonDetails.types.map { it.type.name },
                             weight = pokemonDetails.weight,
                             height = pokemonDetails.height,
@@ -207,8 +223,14 @@ class PokedexFragment : Fragment() {
 
                         // Verificamos si el Pokémon ya ha sido capturado
                         pokemonRef
-                            .whereEqualTo("userEmail", userEmail)  // Filtramos por el correo del usuario
-                            .whereEqualTo("name", pokemon.name)  // Filtramos por el nombre del Pokémon
+                            .whereEqualTo(
+                                "userEmail",
+                                userEmail
+                            )  // Filtramos por el correo del usuario
+                            .whereEqualTo(
+                                "name",
+                                pokemon.name
+                            )  // Filtramos por el nombre del Pokémon
                             .get()
                             .addOnSuccessListener { result ->
                                 if (result.isEmpty) {
@@ -249,16 +271,20 @@ class PokedexFragment : Fragment() {
                             }
                     }
                 } else {
-                    Toast.makeText(context, "Error al obtener los detalles del Pokémon", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Error al obtener los detalles del Pokémon",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<PokemonDetails>, t: Throwable) {
-                Toast.makeText(context, "Error en la conexión: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Error en la conexión: ${t.message}", Toast.LENGTH_SHORT)
+                    .show()
             }
         })
     }
-
 
 
     // Función para obtener el índice del Pokémon a partir de la URL
@@ -267,7 +293,6 @@ class PokedexFragment : Fragment() {
         val matchResult = regex.find(url)
         return matchResult?.groups?.get(1)?.value?.toInt() ?: 0
     }
-
 
 
 }

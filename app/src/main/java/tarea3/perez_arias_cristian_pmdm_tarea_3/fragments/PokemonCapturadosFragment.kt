@@ -3,6 +3,7 @@ package tarea3.perez_arias_cristian_pmdm_tarea_3.fragments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -92,7 +93,16 @@ class PokemonCapturadosFragment : Fragment() {
                     val typesList = document.get("types") as? List<String>
                         ?: listOf()  // Obtenemos la lista de tipos
                     pokemon.types = typesList  // Asignamos la lista de tipos a nuestro Pokémon
+                    val index = (document.get("index") as? Long)?.toInt() // Convirtiendo Long a Int si el valor es Long
 
+                    // Si el valor es null, puedes manejar el caso según tu lógica
+                    if (index != null) {
+                        pokemon.id = index  // Asignando el valor de "index" al id de pokemon
+                    } else {
+                        // Manejo del caso cuando "index" no está presente o no es un valor válido
+                        Log.e("Firestore", "El campo 'index' es nulo o no existe en el documento")
+                    }
+                    pokemonAdapter.setCanDelete(true)
                     capturedPokemons.add(pokemon)
                 }
 
