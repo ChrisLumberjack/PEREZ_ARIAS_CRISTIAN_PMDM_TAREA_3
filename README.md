@@ -55,7 +55,7 @@ La aplicación **Pokedex** es una herramienta interactiva para explorar el mundo
 1. **Clonar el repositorio**:
    - Abre una terminal y clona el repositorio con el siguiente comando:
      ```bash
-     git clone https://github.com/tu-usuario/pokedex-app.git
+     git clone git@github.com:ChrisLumberjack/PEREZ_ARIAS_CRISTIAN_PMDM_TAREA_3.git
      ```
 
 2. **Abrir el proyecto en Android Studio**:
