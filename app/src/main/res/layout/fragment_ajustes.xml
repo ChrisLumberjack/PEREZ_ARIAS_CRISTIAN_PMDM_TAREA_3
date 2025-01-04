@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
-    <!--  Switch para habilitar/deshabilitar eliminación de Pokémon  -->
-    <Switch android:id="@+id/switch_delete_pokemon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Habilitar eliminación de Pokémon"/>
-    <!--  RecyclerView para mostrar los Pokémon  -->
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerView" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:padding="8dp"/>
-    <!--  Switch para cambiar el idioma entre castellano e inglés  -->
-    <Switch android:id="@+id/switch_language" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Idioma Español/Inglés" android:checked="false"/>
-    <!--  Botón para cerrar sesión  -->
-    <Button android:id="@+id/btn_logout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cerrar sesión"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Switch para habilitar/deshabilitar eliminación de Pokémon -->
+    <Switch
+        android:id="@+id/switch_delete_pokemon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Habilitar eliminación de Pokémon" />
+
+    <Switch
+        android:id="@+id/switch_language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="Idioma Español/Inglés" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cerrar sesión" />
 </LinearLayout>

@@ -2,33 +2,25 @@ package tarea3.perez_arias_cristian_pmdm_tarea_3.pokedex
 
 import android.os.Parcel
 import android.os.Parcelable
-
+import com.google.firebase.firestore.PropertyName
 
 data class PokemonResponse(
     val results: List<Pokemon>,
 )
 
-
 data class Pokemon(
-    var id: Int,
-    val url: String,
-    var photoUrl: String?,
-    val height: Double,
-    val weight: Double,
-    val name: String,
-    var types: List<String>
+    var id: Int = 0,
+    val url: String = "",
+    var photoUrl: String? = null,
+    val height: Double = 0.0,
+    val weight: Double = 0.0,
+    var name: String = "",
+    var types: List<String> = listOf(),
+    @PropertyName("userEmail") var userEmail: String = "", // Mapeamos "userEmail" a Firestore
 ) : Parcelable {
 
     // Constructor vacío necesario para Firebase y otros lugares donde sea necesario
-    constructor() : this(
-        id = 0,
-        url = "",
-        photoUrl = null,
-        height = 0.0,
-        weight = 0.0,
-        name = "",
-        types = listOf()
-    )
+    constructor() : this(0, "", null, 0.0, 0.0, "", listOf(), "")
 
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
@@ -37,7 +29,8 @@ data class Pokemon(
         parcel.readDouble(),
         parcel.readDouble(),
         parcel.readString() ?: "",
-        parcel.createStringArrayList() ?: arrayListOf()
+        parcel.createStringArrayList() ?: arrayListOf(),
+        parcel.readString() ?: ""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -48,6 +41,7 @@ data class Pokemon(
         parcel.writeDouble(weight)
         parcel.writeString(name)
         parcel.writeStringList(types)
+        parcel.writeString(userEmail)
     }
 
     override fun describeContents(): Int {
@@ -70,7 +64,7 @@ data class PokemonDetails(
     val id: Int = 0,
     val name: String = "",
     val url: String = "",
-    val sprites: Sprites,  // Asegúrate de tener esta clase definida correctamente
+    val sprites: Sprites,  // Asegúrate de tener esta clase correctamente definida
     val types: List<Type>,  // Lista de tipos
     val weight: Int = 0,
     val height: Int = 0,
