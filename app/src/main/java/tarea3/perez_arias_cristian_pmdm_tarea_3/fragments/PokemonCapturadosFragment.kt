@@ -28,6 +28,7 @@ class PokemonCapturadosFragment : Fragment() {
     private lateinit var pokemonAdapter: PokemonAdapter
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var settingsViewModel: SettingsViewModel
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +41,15 @@ class PokemonCapturadosFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pokemon_capturados, container, false)
+        val pokemonCapturadosFragment = parentFragmentManager.findFragmentByTag("PokemonCapturadosFragment") as? PokemonCapturadosFragment
 
-        // Obtener la instancia del ViewModel compartido
+// Luego llamas a la función de actualización
+        pokemonCapturadosFragment?.loadCapturedPokemons(requireContext())
+        // Inicialización del SettingsViewModel
         settingsViewModel = ViewModelProvider(requireActivity()).get(SettingsViewModel::class.java)
 
+        // Obtener la instancia del ViewModel compartido
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -60,6 +66,12 @@ class PokemonCapturadosFragment : Fragment() {
             }
         )
         recyclerView.adapter = pokemonAdapter
+
+        sharedViewModel.capturedPokemonsLiveData.observe(viewLifecycleOwner) { capturedPokemons ->
+            // Actualiza la lista de Pokémon capturados
+            pokemonAdapter.submitList(capturedPokemons)
+        }
+
         loadCapturedPokemons(requireContext())
 
         val updatePokedex: Button = view.findViewById(R.id.btn_actualizar_pokedex)

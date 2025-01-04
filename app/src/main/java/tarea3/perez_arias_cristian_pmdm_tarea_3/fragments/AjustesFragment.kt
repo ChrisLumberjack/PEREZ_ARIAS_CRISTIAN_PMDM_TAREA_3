@@ -1,14 +1,21 @@
 package tarea3.perez_arias_cristian_pmdm_tarea_3.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Switch
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import tarea3.perez_arias_cristian_pmdm_tarea_3.LoginActivity
+import tarea3.perez_arias_cristian_pmdm_tarea_3.MainActivity
 import tarea3.perez_arias_cristian_pmdm_tarea_3.R
 import tarea3.perez_arias_cristian_pmdm_tarea_3.model.SettingsViewModel
 
@@ -44,11 +51,17 @@ class AjustesFragment : Fragment() {
             saveSetting("delete_pokemon", isChecked)
         }
 
+        val buttonCloseSession: Button = view.findViewById(R.id.btn_logout)
+
+        buttonCloseSession.setOnClickListener(){
+            closeSession()
+        }
+
         return view
     }
 
     private fun loadSettings() {
-        val deletePokemon = sharedPreferences.getBoolean("delete_pokemon", false)
+        val deletePokemon = sharedPreferences.getBoolean("delete_pokemon", true)
         switchDeletePokemon.isChecked = deletePokemon
     }
 
@@ -56,5 +69,17 @@ class AjustesFragment : Fragment() {
         val editor = sharedPreferences.edit()
         editor.putBoolean(key, value)
         editor.apply()
+    }
+
+    private fun closeSession() {
+        // Cerrar sesión de Firebase
+        FirebaseAuth.getInstance().signOut()
+
+        // Redirigir al LoginActivity
+        val intent = Intent(activity, LoginActivity::class.java)
+        startActivity(intent)
+
+        // Finalizar la actividad actual para que no quede en el stack de actividades
+        activity?.finish()
     }
 }

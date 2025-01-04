@@ -15,8 +15,11 @@ data class Pokemon(
     val height: Double = 0.0,
     val weight: Double = 0.0,
     var name: String = "",
+
     var types: List<String> = listOf(),
+
     @PropertyName("userEmail") var userEmail: String = "", // Mapeamos "userEmail" a Firestore
+    val index: Int = 0,
 ) : Parcelable {
 
     // Constructor vacío necesario para Firebase y otros lugares donde sea necesario
@@ -30,7 +33,8 @@ data class Pokemon(
         parcel.readDouble(),
         parcel.readString() ?: "",
         parcel.createStringArrayList() ?: arrayListOf(),
-        parcel.readString() ?: ""
+        parcel.readString() ?: "",
+        parcel.readInt() ?: 0,
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -42,6 +46,7 @@ data class Pokemon(
         parcel.writeString(name)
         parcel.writeStringList(types)
         parcel.writeString(userEmail)
+        parcel.writeInt(index)
     }
 
     override fun describeContents(): Int {
@@ -68,6 +73,7 @@ data class PokemonDetails(
     val types: List<Type>,  // Lista de tipos
     val weight: Int = 0,
     val height: Int = 0,
+    val index: Int = 0,
 )
 
 data class CapturedPokemon(
@@ -78,6 +84,7 @@ data class CapturedPokemon(
     val weight: Int,
     val height: Int,
     val userEmail: String,
+
 )
 
 data class Sprites(
