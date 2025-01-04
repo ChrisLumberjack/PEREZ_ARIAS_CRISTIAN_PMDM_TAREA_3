@@ -10,9 +10,6 @@ data class PokemonDetailResponse(
     val abilities: List<Ability>, // Habilidades del Pokémon
 )
 
-data class Sprites(
-    val front_default: String // URL de la imagen del Pokémon
-)
 
 data class TypeSlot(
     val type: AbilityDetail // Cada tipo tiene un nombre
