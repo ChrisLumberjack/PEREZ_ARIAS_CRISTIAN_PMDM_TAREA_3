@@ -4,7 +4,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/pokemon2"
+    >
 
     <!-- TabLayout para las pestañas -->
     <com.google.android.material.tabs.TabLayout

@@ -1,67 +1,97 @@
 <!-- item_pokemon.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="10dp">
 
-    <ImageView
-        android:id="@+id/pokemon_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_launcher_background" />
+        android:layout_margin="10dp"
+        android:paddingStart="30dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/pokemon_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pokémon Name"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:paddingTop="8dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:paddingStart="30dp"
+            android:paddingBottom="20dp">
 
-    <TextView
-        android:id="@+id/pokemon_index"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pokémon Name"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:paddingTop="8dp" />
+            <ImageView
+                android:id="@+id/pokemon_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_launcher_background" />  <!-- Espaciado inferior -->
 
-    <TextView
-        android:id="@+id/pokemon_types"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tipos:" />
+            <TextView
+                android:id="@+id/pokemon_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:gravity="center"
+                android:text="Pokémon Name"
+                android:textSize="18sp"
+                android:textStyle="bold" />  <!-- Espaciado inferior -->
 
+            <TextView
+                android:id="@+id/pokemon_index"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:gravity="center"
+                android:text="Pokémon Index"
+                android:textSize="16sp"
+                android:textStyle="bold" />  <!-- Espaciado inferior -->
 
-    <TextView
-        android:id="@+id/pokemon_weight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Weight"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:paddingTop="4dp" />
+            <TextView
+                android:id="@+id/pokemon_types"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Tipos:"
+                android:textSize="16sp"
+                android:textStyle="bold" />  <!-- Espaciado inferior -->
 
-    <TextView
-        android:id="@+id/pokemon_height"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Height"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:paddingTop="4dp" />
+            <TextView
+                android:id="@+id/pokemon_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:gravity="center"
+                android:text="Weight"
+                android:textSize="16sp"
+                android:textStyle="bold" />  <!-- Espaciado inferior -->
 
-    <ImageButton
-        android:id="@+id/delete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:src="@android:drawable/ic_menu_delete"
-        />
+            <TextView
+                android:id="@+id/pokemon_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="Height"
+                android:textSize="16sp"
+                android:textStyle="bold" />  <!-- Espaciado inferior -->
+
+            <ImageButton
+                android:id="@+id/delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:src="@android:drawable/ic_menu_delete" />  <!-- Espaciado superior -->
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

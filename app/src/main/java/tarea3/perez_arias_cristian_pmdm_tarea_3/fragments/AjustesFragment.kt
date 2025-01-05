@@ -61,7 +61,7 @@ class AjustesFragment : Fragment() {
     }
 
     private fun loadSettings() {
-        val deletePokemon = sharedPreferences.getBoolean("delete_pokemon", true)
+        val deletePokemon = sharedPreferences.getBoolean("delete_pokemon", false)
         switchDeletePokemon.isChecked = deletePokemon
     }
 
