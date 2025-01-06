@@ -35,6 +35,11 @@ class PokemonCapturadosFragment : Fragment() {
         sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadCapturedPokemons(requireContext())  // Llamar a la función para cargar los datos
+    }
+
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

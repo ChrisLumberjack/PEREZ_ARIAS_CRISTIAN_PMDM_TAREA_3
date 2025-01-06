@@ -50,12 +50,13 @@ dependencies {
     implementation("com.google.firebase:firebase-database:21.0.0") // Firebase Realtime Database
     implementation("com.google.firebase:firebase-storage:21.0.1")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
-
+    implementation("com.github.bumptech.glide:glide:4.x.x")
     // Dependencia para Google Play Services
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
     // Flexbox layout
     implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation(libs.androidx.navigation.fragment)
 
     // Dependencias de AndroidX
     val fragment_version = "1.8.3"

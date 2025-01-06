@@ -1,0 +1,79 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainActivity">
+
+    <!-- Fragmento de Pokémon capturados -->
+    <fragment
+        android:id="@+id/pokemonCapturadosFragment"
+        android:name="tarea3.perez_arias_cristian_pmdm_tarea_3.fragments.PokemonCapturadosFragment"
+        android:label="fragment_pokemon_capturados"
+        tools:layout="@layout/fragment_pokemon_capturados" >
+        <action
+            android:id="@+id/action_pokemonCapturadosFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_pokemonCapturadosFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_pokemonCapturadosFragment_to_registerActivity"
+            app:destination="@id/registerActivity" />
+    </fragment>
+
+    <!-- Fragmento de Detalle del Pokémon -->
+    <fragment
+        android:id="@+id/detallePokemonFragment"
+        android:name="tarea3.perez_arias_cristian_pmdm_tarea_3.fragments.DetallePokemonFragment"
+        android:label="fragment_detalle_pokemon"
+        tools:layout="@layout/fragment_detalle_pokemon" >
+        <action
+            android:id="@+id/action_detallePokemonFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_detallePokemonFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_detallePokemonFragment_to_registerActivity"
+            app:destination="@id/registerActivity" />
+    </fragment>
+
+    <!-- Fragmento Pokedex -->
+    <fragment
+        android:id="@+id/pokedexFragment"
+        android:name="tarea3.perez_arias_cristian_pmdm_tarea_3.fragments.PokedexFragment"
+        android:label="fragment_pokedex"
+        tools:layout="@layout/fragment_pokedex" >
+        <action
+            android:id="@+id/action_pokedexFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_pokedexFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_pokedexFragment_to_registerActivity"
+            app:destination="@id/registerActivity" />
+    </fragment>
+
+    <!-- Actividad Login -->
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="tarea3.perez_arias_cristian_pmdm_tarea_3.LoginActivity"
+        android:label="LoginActivity"
+        android:launchMode="singleTop" /> <!-- Esto evitará crear múltiples instancias -->
+
+    <!-- Actividad Principal -->
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="tarea3.perez_arias_cristian_pmdm_tarea_3.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main"
+        android:launchMode="singleTop" /> <!-- Asegúrate de que no se cree varias instancias -->
+
+    <!-- Actividad Registro -->
+    <activity
+        android:id="@+id/registerActivity"
+        android:name="tarea3.perez_arias_cristian_pmdm_tarea_3.RegisterActivity"
+        android:label="activity_register"
+        tools:layout="@layout/activity_register" />
+</navigation>

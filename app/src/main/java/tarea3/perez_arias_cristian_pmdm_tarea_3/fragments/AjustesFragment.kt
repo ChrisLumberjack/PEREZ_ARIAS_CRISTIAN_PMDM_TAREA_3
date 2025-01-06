@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,14 +63,19 @@ class AjustesFragment : Fragment() {
 
     private fun loadSettings() {
         val deletePokemon = sharedPreferences.getBoolean("delete_pokemon", false)
+        Log.d("Settings", "Cargando el valor delete_pokemon = $deletePokemon")  // Verifica lo que se carga
         switchDeletePokemon.isChecked = deletePokemon
     }
+
 
     private fun saveSetting(key: String, value: Boolean) {
         val editor = sharedPreferences.edit()
         editor.putBoolean(key, value)
         editor.apply()
+        // Verifica que se guarde correctamente con un log
+        Log.d("Settings", "Guardado el valor $key = $value")
     }
+
 
     private fun closeSession() {
         // Cerrar sesión de Firebase
