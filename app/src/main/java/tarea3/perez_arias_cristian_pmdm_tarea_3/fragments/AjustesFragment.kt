@@ -44,6 +44,8 @@ class AjustesFragment : Fragment() {
         // Cargar el valor actual del SharedPreferences
         loadSettings()
 
+
+
         switchDeletePokemon.setOnCheckedChangeListener { _, isChecked ->
             // Actualizar el ViewModel con el valor del switch
             settingsViewModel.setDeletePokemonEnabled(isChecked)
@@ -57,12 +59,11 @@ class AjustesFragment : Fragment() {
         buttonCloseSession.setOnClickListener(){
             closeSession()
         }
-
         return view
     }
 
     private fun loadSettings() {
-        val deletePokemon = sharedPreferences.getBoolean("delete_pokemon", false)
+        val deletePokemon = sharedPreferences.getBoolean("delete_pokemon", true)
         Log.d("Settings", "Cargando el valor delete_pokemon = $deletePokemon")  // Verifica lo que se carga
         switchDeletePokemon.isChecked = deletePokemon
     }
