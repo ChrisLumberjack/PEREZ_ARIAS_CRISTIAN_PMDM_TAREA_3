@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -46,7 +47,8 @@ class PokemonCapturadosFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pokemon_capturados, container, false)
-        val pokemonCapturadosFragment = parentFragmentManager.findFragmentByTag("PokemonCapturadosFragment") as? PokemonCapturadosFragment
+        val pokemonCapturadosFragment =
+            parentFragmentManager.findFragmentByTag("PokemonCapturadosFragment") as? PokemonCapturadosFragment
 
 // Luego llamas a la función de actualización
         pokemonCapturadosFragment?.loadCapturedPokemons(requireContext())
@@ -80,7 +82,7 @@ class PokemonCapturadosFragment : Fragment() {
         loadCapturedPokemons(requireContext())
 
         val updatePokedex: Button = view.findViewById(R.id.btn_actualizar_pokedex)
-
+        updatePokedex.isVisible = false
         updatePokedex.setOnClickListener {
             loadCapturedPokemons(requireContext())
         }
@@ -119,7 +121,11 @@ class PokemonCapturadosFragment : Fragment() {
                 pokemonAdapter.submitList(capturedPokemons)
             }
             .addOnFailureListener {
-                Toast.makeText(context, "Error al cargar los Pokémon capturados", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Error al cargar los Pokémon capturados",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
@@ -137,11 +143,19 @@ class PokemonCapturadosFragment : Fragment() {
                     val documentId = result.documents[0].id
                     db.collection("pokemon").document(documentId).delete()
                         .addOnSuccessListener {
-                            Toast.makeText(context, "${pokemon.name} eliminado!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "${pokemon.name} eliminado!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             loadCapturedPokemons(requireContext())
                         }
                         .addOnFailureListener {
-                            Toast.makeText(context, "Error al eliminar el Pokémon", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Error al eliminar el Pokémon",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                 }
             }
